@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  script(src="/socket.io/socket.io.js")
+  script.
+    var socket = io('http://localhost:3000');
+    socket.on('connect',function(){
+        var user = {};
+        user.SID = "#{title}";
+        user.UserName = "zhangsan";
+        user.RealName = "zhangsan2";
+        user.LoginTime = new Date();
+        user.DeviceType = "android";
+        user.DeviceToken = "1";
+        user.IsOnline = true;
+        user.Project = "test";
+
+        socket.emit('login', user);
+    })
+   
+
+    socket.on('receive',function(msg){
+       console.log(msg);
+       alert("sender:"+ msg.SenderID + "," + "receiver:"+ msg.ReceiverID);
+    });
+
+
+      //- socket.on('news', function (data) {
+      //-   console.log(data);
+      //-   socket.emit('my other event', { my: 'data' });
+      //- });
+      //- socket.on('socketToMe', function (data) {
+      //-   console.log(data);
+      //- });
